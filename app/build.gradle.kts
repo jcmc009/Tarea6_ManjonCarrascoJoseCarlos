@@ -41,6 +41,13 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    // SDK principal  de MapLibre
+    implementation ("org.maplibre.gl:android-sdk:13.1.0")
+    //Permite agregar marcadores y otras anotaciones
+    implementation ("org.maplibre.gl:android-plugin-annotation-v9:3.0.2")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
