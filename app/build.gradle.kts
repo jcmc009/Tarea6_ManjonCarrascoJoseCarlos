@@ -8,7 +8,11 @@ android {
         version = release(36) {
             minorApiLevel = 1
         }
+        buildFeatures {
+            viewBinding = true
+        }
     }
+
 
     defaultConfig {
         applicationId = "com.example.tarea6_manjoncarrascojosecarlos"

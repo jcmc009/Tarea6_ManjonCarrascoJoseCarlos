@@ -1,59 +1,102 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.tarea6_manjoncarrascojosecarlos
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.tarea6_manjoncarrascojosecarlos.databinding.FragmentMapaBinding
+import org.maplibre.android.MapLibre
+import org.maplibre.android.camera.CameraUpdateFactory
+import org.maplibre.android.geometry.LatLng
+import org.maplibre.android.annotations.MarkerOptions
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MapaFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MapaFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentMapaBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // 1. Inicializar el motor SIEMPRE antes de inflar la vista
+        MapLibre.getInstance(requireContext())
+
+        // 2. Inflar la vista usando ViewBinding
+        _binding = FragmentMapaBinding.inflate(inflater, container, false)
+
+        // 3. Notificar al mapa que se ha creado
+        binding.mapView.onCreate(savedInstanceState)
+
+        // 4. Configurar el mapa
+        cargarConfiguracionMapa()
+
+        return binding.root
+    }
+
+    private fun cargarConfiguracionMapa() {
+        binding.mapView.getMapAsync { map ->
+            val style =
+                "https://api.maptiler.com/maps/landscape-v4/style.json?key=xbbWXbxyIVv62NRTuWX2"
+
+            map.setStyle(style) {
+                // Coordenadas usando la clase de MapLibre
+                val madrid = LatLng(40.41, -3.70)
+
+                // Añadir marcador usando la clase de MapLibre
+                map.addMarker(
+                    MarkerOptions()
+                        .position(madrid)
+                        .title("Madrid")
+                )
+
+                // Mover cámara (Nota: el zoom suele pasarse como Double, he puesto 12.0)
+                map.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(madrid, 12.0)
+                )
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mapa, container, false)
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MapaFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MapaFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapView.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapView.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Es vital destruir el mapa y vaciar el binding al destruir el fragmento
+        binding.mapView.onDestroy()
+        _binding = null
     }
 }
