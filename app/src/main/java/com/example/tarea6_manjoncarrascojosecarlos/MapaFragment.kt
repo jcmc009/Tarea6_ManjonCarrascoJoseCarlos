@@ -268,7 +268,7 @@ class MapaFragment : Fragment() {
         val etContrasena = dialogView.findViewById<EditText>(R.id.contrasenia)
         val btnFinalizar = dialogView.findViewById<Button>(R.id.btnFinalizar)
 
-        // ✅ PERSONALIZAMOS LA VENTANA
+        //PERSONALIZAMOS LA VENTANA
         tvTitulo.text = "Misión en $nombreCiudad"
         tvEnunciado.text = misionActual.enunciado // Ponemos el texto único de la ciudad
 
