@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- La imagen de Astro Bot (asegúrate de que el nombre coincida con tu imagen) -->
+    <ImageView
+        android:id="@+id/imgDialog"
+        android:layout_width="142dp"
+        android:layout_height="187dp"
+        android:layout_gravity="center"
+        android:src="@drawable/actividad" />
+
+    <TextView
+        android:id="@+id/tvTituloDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/actividad_cabecera"
+        android:textColor="#004488"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvEnunciadoDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/actividad_enunciado"
+        android:textColor="#333333" />
+
+    <EditText
+        android:id="@+id/contrasenia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/editbox_background"
+        android:hint="@string/contrasenia_panel"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/btnFinalizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#1976D2"
+        android:text="@string/finalizar_actividad"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

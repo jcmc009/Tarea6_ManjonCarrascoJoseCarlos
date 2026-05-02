@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Tarea6_ManjonCarrascoJoseCarlos</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="finalizar_actividad">FINALIZAR ACTIVIDAD</string>
+    <string name="contrasenia_panel">CONTRASEÑA DEL PANEL</string>
+    <string name="actividad_enunciado">Deberás localizar todos los núcleos ocultos para restaurar el sistema.</string>
+    <string name="actividad_cabecera">Actividad: Recuperación de Núcleos</string>
 </resources>
