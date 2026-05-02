@@ -9,4 +9,19 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchUbicacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#D9E3F2FD"
+        android:checked="true"
+        android:padding="8dp"
+        android:text="@string/mostrar_posicion"
+        android:textColor="#1565C0"
+        android:textStyle="bold" />
+    <!-- checked="true" hace que empiece encendido por defecto -->
 </FrameLayout>

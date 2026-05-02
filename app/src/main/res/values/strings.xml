@@ -5,4 +5,5 @@
     <string name="contrasenia_panel">CONTRASEÑA DEL PANEL</string>
     <string name="actividad_enunciado">Deberás localizar todos los núcleos ocultos para restaurar el sistema.</string>
     <string name="actividad_cabecera">Actividad: Recuperación de Núcleos</string>
+    <string name="mostrar_posicion">Mostrar mi posición</string>
 </resources>

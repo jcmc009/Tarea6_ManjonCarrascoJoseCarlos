@@ -2,7 +2,9 @@
 
 package com.example.tarea6_manjoncarrascojosecarlos
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,13 +23,78 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import android.annotation.SuppressLint
+import org.maplibre.android.location.LocationComponentActivationOptions
+import org.maplibre.android.location.modes.CameraMode
+import org.maplibre.android.location.modes.RenderMode
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.Style
 
 class MapaFragment : Fragment() {
 
     private var _binding: FragmentMapaBinding? = null
     private val binding get() = _binding!!
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        // Si cualquier permiso es aceptado (preciso o aproximado), continuamos
+        if (permissions.values.any { it }) {
+            cargarConfiguracionMapa()
+        } else {
+            gestionErrorPermiso()
+        }
+    }
+
+    private fun checkLocationPermission() {
+        val fine = Manifest.permission.ACCESS_FINE_LOCATION
+        val coarse = Manifest.permission.ACCESS_COARSE_LOCATION
+
+        when {
+            // Caso A: El usuario ya aceptó el permiso previamente
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                coarse
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                cargarConfiguracionMapa()
+            }
+
+            // Caso B: El usuario rechazó antes; explicamos la necesidad
+            shouldShowRequestPermissionRationale(fine) -> {
+                mostrarDialogoExplicativo()
+            }
+
+            // Caso C: Primera solicitud: pedimos ambos niveles (Normativa de Android)
+            else -> {
+                locationPermissionRequest.launch(arrayOf(fine, coarse))
+            }
+        }
+    }
+
+    private fun mostrarDialogoExplicativo() {
+        // Muestra un mensaje explicando por qué necesitas el permiso
+        Toast.makeText(
+            requireContext(),
+            "La gincana de Astro Bot necesita tu ubicación para encontrar los núcleos.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        // Después de explicarlo, volvemos a lanzar la petición
+        val fine = Manifest.permission.ACCESS_FINE_LOCATION
+        val coarse = Manifest.permission.ACCESS_COARSE_LOCATION
+        locationPermissionRequest.launch(arrayOf(fine, coarse))
+    }
+
+    private fun gestionErrorPermiso() {
+        // El usuario ha denegado el permiso por completo
+        Toast.makeText(
+            requireContext(),
+            "Sin ubicación no puedes jugar. Ve a Ajustes para darle permiso a la app.",
+            Toast.LENGTH_LONG
+        ).show()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +111,8 @@ class MapaFragment : Fragment() {
         binding.mapView.onCreate(savedInstanceState)
 
         // 4. Configurar el mapa
-        cargarConfiguracionMapa()
+        // cargarConfiguracionMapa()
+        checkLocationPermission()
 
         return binding.root
     }
@@ -55,7 +123,13 @@ class MapaFragment : Fragment() {
             val style =
                 "https://api.maptiler.com/maps/landscape-v4/style.json?key=xbbWXbxyIVv62NRTuWX2"
 
-            map.setStyle(style) {
+            map.setStyle(style) { loadedStyle ->
+                habilitarUbicacionEnMapa(map, loadedStyle)
+
+                map.setOnMarkerClickListener { marker ->
+                    mostrarDialogoActividad(marker.title)
+                    true
+                }
                 // Preparar icono personalizado
 
                 // Obtener la imagen original
@@ -126,6 +200,37 @@ class MapaFragment : Fragment() {
                     true // Retornamos true para indicar que hemos consumido el evento
                 }
             }
+
+        }
+
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun habilitarUbicacionEnMapa(map: MapLibreMap, style: Style) {
+        // 1. Obtenemos el componente de ubicación del mapa
+        val locationComponent = map.locationComponent
+
+        // 2. Lo configuramos y lo activamos con el estilo actual
+        val activationOptions =
+            LocationComponentActivationOptions.builder(requireContext(), style).build()
+        locationComponent.activateLocationComponent(activationOptions)
+
+        // 3. ¡Hacemos visible el punto azul!
+        locationComponent.isLocationComponentEnabled = true
+
+        // 4. (Opcional) Modo de cámara: TRACKING hace que la cámara siga al usuario.
+        // Puedes comentarlo si prefieres que la cámara se quede en Linares (Zoom 7.0) como la tenías.
+        locationComponent.cameraMode = CameraMode.TRACKING
+
+        // 5. Modo de renderizado: COMPASS muestra la flechita indicando hacia dónde miras
+        locationComponent.renderMode = RenderMode.COMPASS
+        binding.switchUbicacion.setOnCheckedChangeListener { _, isChecked ->
+            // Si el usuario cambia el interruptor, encendemos o apagamos el punto azul
+            locationComponent.isLocationComponentEnabled = isChecked
+
+            // Mensaje opcional para que el usuario sepa qué ha pasado
+            val mensaje = if (isChecked) "Ubicación activada" else "Ubicación oculta"
+            Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
         }
     }
 
