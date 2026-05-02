@@ -46,18 +46,49 @@ class MapaFragment : Fragment() {
 
             map.setStyle(style) {
                 // Coordenadas usando la clase de MapLibre
-                val madrid = LatLng(40.41, -3.70)
+                // 1. Linares (Jaén)
+                val linares = LatLng(38.0942, -3.6308)
+                map.addMarker(MarkerOptions().position(linares).title("Linares"))
 
-                // Añadir marcador usando la clase de MapLibre
-                map.addMarker(
-                    MarkerOptions()
-                        .position(madrid)
-                        .title("Madrid")
-                )
+                // 2. Sevilla
+                val sevilla = LatLng(37.3891, -5.9845)
+                map.addMarker(MarkerOptions().position(sevilla).title("Sevilla"))
 
-                // Mover cámara (Nota: el zoom suele pasarse como Double, he puesto 12.0)
+                // 3. Málaga
+                val malaga = LatLng(36.7213, -4.4214)
+                map.addMarker(MarkerOptions().position(malaga).title("Málaga"))
+
+                // 4. Córdoba
+                val cordoba = LatLng(37.8882, -4.7794)
+                map.addMarker(MarkerOptions().position(cordoba).title("Córdoba"))
+
+                // 5. Granada
+                val granada = LatLng(37.1773, -3.5986)
+                map.addMarker(MarkerOptions().position(granada).title("Granada"))
+
+                // 6. Almería
+                val almeria = LatLng(36.8340, -2.4637)
+                map.addMarker(MarkerOptions().position(almeria).title("Almería"))
+
+                // 7. Huelva
+                val huelva = LatLng(37.2614, -6.9447)
+                map.addMarker(MarkerOptions().position(huelva).title("Huelva"))
+
+                // 8. Cádiz
+                val cadiz = LatLng(36.5271, -6.2886)
+                map.addMarker(MarkerOptions().position(cadiz).title("Cádiz"))
+
+                // 9. Jaén
+                val jaen = LatLng(37.7692, -3.7903)
+                map.addMarker(MarkerOptions().position(jaen).title("Jaén"))
+
+                // 10. Jerez de la Frontera
+                val jerez = LatLng(36.6850, -6.1260)
+                map.addMarker(MarkerOptions().position(jerez).title("Jerez de la Frontera"))
+
+                // Mover cámara a Linares (Zoom 7.0 para ver Andalucía)
                 map.moveCamera(
-                    CameraUpdateFactory.newLatLngZoom(madrid, 12.0)
+                    CameraUpdateFactory.newLatLngZoom(linares, 7.0)
                 )
             }
         }
