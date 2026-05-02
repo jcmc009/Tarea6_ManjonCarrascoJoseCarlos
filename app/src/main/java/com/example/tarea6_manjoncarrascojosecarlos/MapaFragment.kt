@@ -42,7 +42,7 @@ class MapaFragment : Fragment() {
     ) { permissions ->
         // Si cualquier permiso es aceptado (preciso o aproximado), continuamos
         if (permissions.values.any { it }) {
-            cargarConfiguracionMapa()
+            cargarMapa()
         } else {
             gestionErrorPermiso()
         }
@@ -58,7 +58,7 @@ class MapaFragment : Fragment() {
                 requireContext(),
                 coarse
             ) == PackageManager.PERMISSION_GRANTED -> {
-                cargarConfiguracionMapa()
+                cargarMapa()
             }
 
             // Caso B: El usuario rechazó antes; explicamos la necesidad
@@ -111,13 +111,12 @@ class MapaFragment : Fragment() {
         binding.mapView.onCreate(savedInstanceState)
 
         // 4. Configurar el mapa
-        // cargarConfiguracionMapa()
         checkLocationPermission()
 
         return binding.root
     }
 
-    private fun cargarConfiguracionMapa() {
+    private fun cargarMapa() {
         binding.mapView.getMapAsync { map ->
 
             val style =
@@ -215,11 +214,10 @@ class MapaFragment : Fragment() {
             LocationComponentActivationOptions.builder(requireContext(), style).build()
         locationComponent.activateLocationComponent(activationOptions)
 
-        // 3. ¡Hacemos visible el punto azul!
+        // 3. Se hace visible el icono de localización
         locationComponent.isLocationComponentEnabled = true
 
-        // 4. (Opcional) Modo de cámara: TRACKING hace que la cámara siga al usuario.
-        // Puedes comentarlo si prefieres que la cámara se quede en Linares (Zoom 7.0) como la tenías.
+        // 4. Modo de cámara: TRACKING hace que la cámara siga al usuario
         locationComponent.cameraMode = CameraMode.TRACKING
 
         // 5. Modo de renderizado: COMPASS muestra la flechita indicando hacia dónde miras

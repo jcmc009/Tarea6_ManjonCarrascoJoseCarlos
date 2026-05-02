@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-    <!-- La imagen de Astro Bot (asegúrate de que el nombre coincida con tu imagen) -->
     <ImageView
         android:id="@+id/imgDialog"
         android:layout_width="142dp"
